@@ -22,7 +22,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     //console.log(req.body);
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     //console.log(user);
     if (user) {
       if (user.password == password) {
@@ -30,10 +30,14 @@ const login = async (req, res) => {
           { name: user.name, email: user.email, image: user.image },
           secret
         );
+
+        user = user.toJSON();
+
+        delete user.password;
         res.send({
           message: "Login Sucessfull",
           token: token,
-          data: { name: user.name, email: user.email, image: user.image },
+          data: user,
         });
       } else {
         res.send({ message: "worng password" });
