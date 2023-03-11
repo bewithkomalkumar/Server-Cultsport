@@ -34,6 +34,7 @@ const login = async (req, res) => {
         user = user.toJSON();
 
         delete user.password;
+
         res.send({
           message: "Login Sucessfull",
           token: token,

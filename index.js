@@ -19,6 +19,7 @@ const {
   getSingleProduct,
   deleteSigleProductFormCart,
 } = require("./Controller/auth");
+const PaymentRouter = require("./Routes/paymentRouter");
 
 const app = express();
 app.use(cors());
@@ -27,12 +28,16 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send({ message: "Welcome" });
 });
+
 app.use("/auth", authRouter);
+app.use("/api", PaymentRouter);
+
 app.patch("/cart", validateAddtoCart);
 app.get("/cart/:userid", showUserCart);
 app.get("/singleProduct/:id", getSingleProduct);
 app.patch("/deteleSingleItem", deleteSigleProductFormCart);
 app.patch("/orderplace", EmptyCart);
+
 app.get("/Just_Launched", async (req, res) => {
   try {
     let data = [];
@@ -111,3 +116,25 @@ connectDatabase().then(
     console.log("Server is Listening on http://localhost:3030");
   })
 );
+
+/*  
+Metod: POST
+URL: "https://api.razorpay.com/v1/orders";
+HEADERS: 'content-type:application/json'
+AUTHORISATION: type - "Basci Auth"
+							 Username: [YOUR_KEY_ID]
+							 Password: [YOUR_KEY_SECRET]	               
+BODY:'{
+    "amount": 1000, (Mandatory Parameter)
+    "currency": "INR", (Mandatory Parameter)
+    "receipt": "qwsaq1",
+    "partial_payment": true,
+    "first_payment_min_amount": 230
+}'
+
+
+
+
+
+
+*/
